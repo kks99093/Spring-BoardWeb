@@ -1,5 +1,8 @@
 package polymorphism;
 
+import org.springframework.stereotype.Component;
+
+
 public class TmaxSpeaker implements Speaker{
 	public TmaxSpeaker() {
 		System.out.println("---> TmaxSpeaker 객체 생성");

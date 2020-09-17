@@ -100,14 +100,68 @@ setter로 넣는방법
 	<property name="speaker" ref="appleSpeaker"/> <===========이부분(property가 setter)
 								name에는 멤버필드의 변수명을 적어줌
 								ref는 밑에 bean의 id를 적어줌
+								bean등록하면서 참조하여 값을 넣어주는방법
 </bean>
 <bean id="appleSpeaker" class="polymorphism.AppleSpeaker" lazy-init="true"/>
+혹시 밑의 탭에 Namespaces 가 없다면
+applcationContext.xml 우클릭 - open with - spring config editor
+저거 누르면 우리가 쓸수있는것들이 나와있음
+거기서 p 추가
+xmlns:p="http://www.springframework.org/schema/p" 그럼 윗줄에 이렇게 추가돼있음
+jstl에 c,fn 처럼 이제 p를 쓸수있음
+<bean id="tv" class="polymorphism.SamsungTV" p:speaker-ref="appleSpeaker">
+</bean>
+<bean id="appleSpeaker" class="polymorphism.AppleSpeaker" lazy-init="true"/>
+<bean id="tMaxSpeaker" class="polymorphism.TmaxSpeaker" lazy-init="true"/>
+<property name="speaker" ref="appleSpeaker"/>를 쓰던걸 이런식으로 바꿀수도있음
+그런데 선생님은 안쓴다고함(갠취)
+
+<bean id="col" class="polymorphism.CollectionBean">
+	<property name="addressList">
+		<list>
+			<value>서울</value>
+			<value>대전</value>
+			<value>대구</value>
+			<value>부산</value>
+		</list>
+	</property>
+</bean>
+bean등록할때 직접 값을 집어넣는방법 <value>로 넣음 (이건 list에다가 값을 넣는방법)
+
+bean등록 방법 2개 (둘이 같이써도됨 적절하게 사용하면됨)
+1. 위에 했던것처럼 xml로 넣는거 (장점: 바꾸기가 쉽다)
+2. 이노테이션? (장점: 간단하다)
+
+이노테이션 쓰는방법
+Namespaces 탭에서 context 체크
+<context:component-scan base-package="polymorphism"></context:component-scan>   <==적어줌
+				    여기(polymorphism자리)에 기본패키지를 적어줘야함
+이거 적어주는게 필수 얘가 패키지를 돌아다니면서 객체화해줌
+
+bean등록할 클래스 위에다가 @Component를 적어주면 이렇게하면 bean등록된거
+ex)
+@Component("tv")  <---이렇게하면 tv로 호출가능
+public class LgTV{}
+Component만 적으면 <bean class="polymorphism.SamsungTV"> 안적으면 getBean 할때 자동으로 lgtv로 들어감
+Component("tv")를 적으면 <bean id="tv" class="polymorphism.SamsungTV"> 라고 보면됨
+
+TmaxSpeaker에 @Component를 달아놓고
+LgTV에서 밑에처럼 해놓으면 자동연결
+@Autowired <--  bean으로 만들수있는것중에 Speaker에 들어갈수 있는게 있다면 자동으로 연결해준다
+private Speaker speaker;
+Speaker에 들어갈수있는 bean이 여러개이거나 없으면 에러가뜸
+여기서 TmaxSpeaker 썻다가 AppleSpeaker 썻다가 바꾸고 싶으면
+TmaxSpeaker의 @Component를 지워주고
+xml에서 <bean class="polymorphism.AppleSpeaker"/> 해준다
+다른방법은 프로젝트에 필기해놨는데 썜이 거의 이방식으로 쓴다고함
 
 
 
 
 
 
+
+ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 우리가쓸거
 src/main/java
 src/main/resources
